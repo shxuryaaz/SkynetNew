@@ -119,19 +119,13 @@
 }
 
 /* Header Layout */
-.header-content {
+.header-content-centered {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
     gap: 1rem;
     padding: 0 1rem;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    text-align: center;
 }
 
 .logo {
@@ -147,16 +141,25 @@
     overflow: hidden;
 }
 
-.title-section {
+.title-section-centered {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+.company-badge-centered {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Orbitron', monospace;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
 }
 
 @media (max-width: 768px) {
