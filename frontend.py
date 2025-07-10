@@ -131,8 +131,9 @@ def main():
     # Header
     st.markdown("""
     <div class="header">
-        <h1 class="neon-title">🤖 SkyNetAI</h1>
-        <p class="subtitle">Enter the Matrix of AI Consciousness</p>
+        <h1 class="professional-title">🤖 SkyNetAI</h1>
+        <p class="subtitle">Advanced AI Assistant Platform</p>
+        <div class="company-badge">Enterprise Ready</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -141,7 +142,7 @@ def main():
         st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
         
         # Chat Management Section
-        st.markdown("## 💬 Chat Sessions")
+        st.markdown("## 💬 Conversation History")
         
         # New Chat Button
         if st.button("➕ New Chat", key="new_chat", use_container_width=True):
@@ -186,7 +187,7 @@ def main():
         st.markdown("---")
         
         # Personality Selection Section
-        st.markdown("## 🎭 Select AI Personality")
+        st.markdown("## 🎯 AI Assistant Type")
         
         if st.session_state.personalities:
             personality_options = {
@@ -195,7 +196,7 @@ def main():
             }
             
             selected_personality = st.selectbox(
-                "Choose your cyberpunk companion:",
+                "Select assistant specialization:",
                 options=list(personality_options.keys()),
                 format_func=lambda x: personality_options[x],
                 index=list(personality_options.keys()).index(st.session_state.current_personality) if st.session_state.current_personality in personality_options else 0
@@ -286,13 +287,22 @@ def main():
         st.markdown("""
         <div class="chat-container">
             <div class="welcome-message">
-                <h2 style="color: #00d4ff; text-align: center;">Welcome to SkyNetAI</h2>
-                <p style="text-align: center; color: #cccccc;">
-                    Create a new chat or select an existing one to start your cyberpunk AI experience.
+                <h2>Welcome to SkyNetAI</h2>
+                <p>
+                    Advanced AI assistant platform with specialized conversation management.
                 </p>
-                <p style="text-align: center; color: #888888;">
-                    Choose your AI companion and dive into the digital realm!
+                <p>
+                    Create a new conversation or select an existing one to begin your AI-powered workflow.
                 </p>
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(37, 99, 235, 0.1); border-radius: 8px; border: 1px solid rgba(37, 99, 235, 0.2);">
+                    <h4 style="color: #3b82f6; margin-bottom: 0.5rem;">Key Features:</h4>
+                    <ul style="color: #cbd5e1; line-height: 1.8; margin: 0;">
+                        <li>Persistent conversation history</li>
+                        <li>Multiple AI assistant types</li>
+                        <li>Professional enterprise interface</li>
+                        <li>Real-time response generation</li>
+                    </ul>
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -300,7 +310,16 @@ def main():
     # Footer
     st.markdown("""
     <div class="footer">
-        <p>⚡ Powered by SkyNetAI | 🌐 Connected to the Matrix</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div>
+                <p style="margin: 0; font-weight: 500;">SkyNetAI Enterprise Platform</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Powered by OpenAI GPT-4o | PostgreSQL Database</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Version 2.0</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Enterprise Ready</p>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
