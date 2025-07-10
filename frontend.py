@@ -131,9 +131,9 @@ def main():
     # Header
     st.markdown("""
     <div class="header">
-        <h1 class="professional-title">🤖 SkyNetAI</h1>
-        <p class="subtitle">Advanced AI Assistant Platform</p>
-        <div class="company-badge">Enterprise Ready</div>
+        <h1 class="professional-title">🤖 SKYNET</h1>
+        <p class="subtitle">Neural Network Defense System</p>
+        <div class="company-badge">System Online</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -142,13 +142,13 @@ def main():
         st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
         
         # Chat Management Section
-        st.markdown("## 💬 Conversation History")
+        st.markdown("## 💬 Mission Archives")
         
         # New Chat Button
-        if st.button("➕ New Chat", key="new_chat", use_container_width=True):
+        if st.button("➕ New Mission", key="new_chat", use_container_width=True):
             # Generate a default title based on current time
             import datetime
-            default_title = f"Chat {datetime.datetime.now().strftime('%m/%d %H:%M')}"
+            default_title = f"Mission {datetime.datetime.now().strftime('%m/%d %H:%M')}"
             new_chat = create_chat(default_title)
             if new_chat:
                 st.session_state.current_chat_id = new_chat["id"]
@@ -187,7 +187,7 @@ def main():
         st.markdown("---")
         
         # Personality Selection Section
-        st.markdown("## 🎯 AI Assistant Type")
+        st.markdown("## 🎯 Neural Agent Selection")
         
         if st.session_state.personalities:
             personality_options = {
@@ -196,7 +196,7 @@ def main():
             }
             
             selected_personality = st.selectbox(
-                "Select assistant specialization:",
+                "Select neural agent specialization:",
                 options=list(personality_options.keys()),
                 format_func=lambda x: personality_options[x],
                 index=list(personality_options.keys()).index(st.session_state.current_personality) if st.session_state.current_personality in personality_options else 0
@@ -287,20 +287,20 @@ def main():
         st.markdown("""
         <div class="chat-container">
             <div class="welcome-message">
-                <h2>Welcome to SkyNetAI</h2>
+                <h2>Welcome to Skynet Neural Network</h2>
                 <p>
-                    Advanced AI assistant platform with specialized conversation management.
+                    Advanced neural network system with specialized tactical agents.
                 </p>
                 <p>
-                    Create a new conversation or select an existing one to begin your AI-powered workflow.
+                    Initiate a new mission or access existing mission archives to begin operations.
                 </p>
-                <div style="margin-top: 2rem; padding: 1rem; background: rgba(37, 99, 235, 0.1); border-radius: 8px; border: 1px solid rgba(37, 99, 235, 0.2);">
-                    <h4 style="color: #3b82f6; margin-bottom: 0.5rem;">Key Features:</h4>
-                    <ul style="color: #cbd5e1; line-height: 1.8; margin: 0;">
-                        <li>Persistent conversation history</li>
-                        <li>Multiple AI assistant types</li>
-                        <li>Professional enterprise interface</li>
-                        <li>Real-time response generation</li>
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(220, 38, 38, 0.1); border-radius: 8px; border: 1px solid rgba(220, 38, 38, 0.2);">
+                    <h4 style="color: #dc2626; margin-bottom: 0.5rem;">System Capabilities:</h4>
+                    <ul style="color: #d4d4d4; line-height: 1.8; margin: 0;">
+                        <li>Persistent mission archives</li>
+                        <li>Multiple specialized neural agents</li>
+                        <li>Advanced tactical interface</li>
+                        <li>Real-time response processing</li>
                     </ul>
                 </div>
             </div>
@@ -312,12 +312,12 @@ def main():
     <div class="footer">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <div>
-                <p style="margin: 0; font-weight: 500;">SkyNetAI Enterprise Platform</p>
-                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Powered by OpenAI GPT-4o | PostgreSQL Database</p>
+                <p style="margin: 0; font-weight: 600; color: var(--primary-red);">SKYNET NEURAL NETWORK</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Powered by Advanced Learning Models | PostgreSQL Database</p>
             </div>
             <div style="text-align: right;">
-                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Version 2.0</p>
-                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">Enterprise Ready</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">System Version 3.0</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--accent-orange); font-weight: 600;">Made by Shaurya</p>
             </div>
         </div>
     </div>

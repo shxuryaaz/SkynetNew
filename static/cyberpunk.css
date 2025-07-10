@@ -1,43 +1,50 @@
-/* Professional AI Interface Theme */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Skynet Terminator Theme */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-blue: #2563eb;
-    --primary-blue-light: #3b82f6;
-    --primary-blue-dark: #1d4ed8;
-    --accent-purple: #7c3aed;
-    --accent-cyan: #06b6d4;
-    --success-green: #10b981;
+    --primary-red: #dc2626;
+    --primary-red-light: #ef4444;
+    --primary-red-dark: #b91c1c;
+    --accent-orange: #ea580c;
+    --accent-yellow: #f59e0b;
+    --success-green: #16a34a;
     --warning-orange: #f59e0b;
-    --error-red: #ef4444;
+    --error-red: #dc2626;
     
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --bg-card: #1e293b;
-    --bg-elevated: #2d3748;
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-card: #1a1a1a;
+    --bg-elevated: #2a2a2a;
     
-    --border-primary: #334155;
-    --border-secondary: #475569;
-    --border-accent: #2563eb;
+    --border-primary: #404040;
+    --border-secondary: #525252;
+    --border-accent: #dc2626;
     
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
-    --text-accent: #2563eb;
+    --text-primary: #f5f5f5;
+    --text-secondary: #d4d4d4;
+    --text-muted: #737373;
+    --text-accent: #dc2626;
     
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-sm: 0 1px 2px 0 rgb(220 38 38 / 0.2);
+    --shadow-md: 0 4px 6px -1px rgb(220 38 38 / 0.3), 0 2px 4px -2px rgb(220 38 38 / 0.2);
+    --shadow-lg: 0 10px 15px -3px rgb(220 38 38 / 0.3), 0 4px 6px -4px rgb(220 38 38 / 0.2);
+    --shadow-xl: 0 20px 25px -5px rgb(220 38 38 / 0.3), 0 8px 10px -6px rgb(220 38 38 / 0.2);
 }
 
 /* Global Styles */
 .stApp {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    background: 
+        linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(26, 26, 26, 0.85) 100%),
+        url('https://miro.medium.com/v2/resize:fit:1400/1*RUVq6Pq7QXMpRcR7r8Jmqg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Orbitron', 'Rajdhani', monospace;
     font-weight: 400;
+    min-height: 100vh;
 }
 
 /* Remove default Streamlit styling */
@@ -71,20 +78,21 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
 }
 
 .professional-title {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Orbitron', monospace;
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-primary);
     margin: 0;
-    letter-spacing: -0.025em;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--accent-orange) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
 }
 
 .subtitle {
@@ -97,14 +105,17 @@
 
 .company-badge {
     display: inline-block;
-    background: var(--primary-blue);
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-top: 0.5rem;
-    letter-spacing: 0.025em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Orbitron', monospace;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
 }
 
 /* Sidebar Styles */
@@ -144,9 +155,10 @@
 }
 
 .chat-item.active {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
+    background: var(--primary-red);
+    border-color: var(--primary-red);
     color: white;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
 }
 
 /* Chat Container */
@@ -169,7 +181,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
 }
 
 /* Welcome Message */
@@ -198,13 +210,13 @@
 
 /* Message Styles */
 .user-message {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
-    border: 1px solid var(--primary-blue);
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    border: 1px solid var(--primary-red);
     border-radius: 12px;
     padding: 1rem 1.25rem;
     margin: 1rem 0;
     margin-left: 2rem;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
     position: relative;
 }
 
@@ -236,7 +248,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-orange), transparent);
 }
 
 .message-header {
@@ -254,15 +266,15 @@
 }
 
 .user-name {
-    color: rgba(255, 255, 255, 0.9);
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
 }
 
 .ai-name {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    color: var(--accent-cyan);
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: var(--accent-orange);
 }
 
 .message-content {
@@ -274,57 +286,61 @@
 
 /* Input Container */
 .input-container {
-    background: var(--card-bg);
-    border: 1px solid var(--neon-pink);
+    background: var(--bg-card);
+    border: 1px solid var(--primary-red);
     border-radius: 15px;
     padding: 1.5rem;
-    box-shadow: 0 0 20px rgba(255, 0, 128, 0.2);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
 }
 
 /* Streamlit Input Overrides */
 .stTextInput > div > div > input {
-    background: var(--dark-bg) !important;
-    border: 2px solid var(--neon-blue) !important;
+    background: var(--bg-card) !important;
+    border: 2px solid var(--primary-red) !important;
     border-radius: 10px !important;
     color: var(--text-primary) !important;
-    font-family: 'Rajdhani', sans-serif !important;
+    font-family: 'Orbitron', monospace !important;
     font-size: 1rem !important;
     padding: 0.75rem !important;
     transition: all 0.3s ease !important;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.2) !important;
 }
 
 .stTextInput > div > div > input:focus {
-    border-color: var(--neon-pink) !important;
-    box-shadow: 0 0 10px rgba(255, 0, 128, 0.5) !important;
+    border-color: var(--primary-red-light) !important;
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.5) !important;
 }
 
 .stSelectbox > div > div > div {
-    background: var(--dark-bg) !important;
-    border: 2px solid var(--neon-green) !important;
+    background: var(--bg-card) !important;
+    border: 2px solid var(--primary-red) !important;
     border-radius: 10px !important;
     color: var(--text-primary) !important;
+    font-family: 'Orbitron', monospace !important;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.2) !important;
 }
 
 /* Button Styles */
 .stButton > button {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%) !important;
-    border: 1px solid var(--primary-blue) !important;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%) !important;
+    border: 1px solid var(--primary-red) !important;
     border-radius: 8px !important;
     color: white !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
+    font-family: 'Orbitron', monospace !important;
+    font-weight: 600 !important;
     padding: 0.625rem 1.25rem !important;
     transition: all 0.2s ease !important;
     box-shadow: var(--shadow-sm) !important;
     font-size: 0.875rem !important;
-    letter-spacing: 0.025em !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
 }
 
 .stButton > button:hover {
-    background: linear-gradient(135deg, var(--primary-blue-light) 0%, var(--primary-blue) 100%) !important;
+    background: linear-gradient(135deg, var(--primary-red-light) 0%, var(--primary-red) 100%) !important;
     transform: translateY(-1px) !important;
-    box-shadow: var(--shadow-md) !important;
-    border-color: var(--primary-blue-light) !important;
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.5) !important;
+    border-color: var(--primary-red-light) !important;
 }
 
 .stButton > button:active {
@@ -334,18 +350,19 @@
 
 /* Form Submit Button */
 .stFormSubmitButton > button {
-    background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%) !important;
-    border: 1px solid var(--success-green) !important;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%) !important;
+    border: 1px solid var(--primary-red) !important;
     border-radius: 8px !important;
     color: white !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
+    font-family: 'Orbitron', monospace !important;
+    font-weight: 600 !important;
     padding: 0.75rem 1.5rem !important;
     width: 100% !important;
     transition: all 0.2s ease !important;
     box-shadow: var(--shadow-sm) !important;
     font-size: 0.875rem !important;
-    letter-spacing: 0.025em !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
 }
 
 .stFormSubmitButton > button:hover {
@@ -362,7 +379,7 @@
 
 /* Spinner */
 .stSpinner {
-    color: var(--neon-blue) !important;
+    color: var(--primary-red) !important;
 }
 
 /* Footer */

@@ -98,9 +98,25 @@ The application follows a client-server architecture with clear separation of co
 - **Enhanced Sidebar**: Added chat history sidebar with session management controls
 - **Database Schema**: Implemented `chats` and `messages` tables with proper relationships
 - **Session Persistence**: Conversations are now saved permanently across application restarts
+- **Skynet Terminator Theme**: Complete visual transformation with red/black color scheme and Terminator-inspired design
+- **Specialized Neural Agents**: Updated AI personalities to Skynet-themed tactical agents with clear specializations
+- **Background Integration**: Added futuristic background image with overlay for enhanced visual appeal
+- **Attribution**: Added "Made by Shaurya" credit in footer
 
 ### Current Limitations
 - No user authentication or persistent user accounts
 - Limited to OpenAI GPT models only
 - No file upload capabilities
 - No advanced visual effects or animations
+
+### Suggested Enhancements
+1. **Voice Recognition**: Add speech-to-text capability for voice commands
+2. **File Upload**: Allow users to upload documents for analysis by neural agents
+3. **Export Features**: Add ability to export mission logs/conversations
+4. **Dark Mode Toggle**: Option to switch between Skynet and alternate themes
+5. **Advanced Analytics**: Add conversation analytics and insights dashboard
+6. **API Integration**: Connect with external services for enhanced functionality
+7. **Mobile Optimization**: Improve responsive design for mobile devices
+8. **Notifications**: Add real-time notifications for system updates
+9. **Multi-language Support**: Add support for multiple languages
+10. **Custom Agents**: Allow users to create custom neural agent personalities
