@@ -12,9 +12,10 @@ SkyNetAI is a Terminator-themed neural network defense system featuring speciali
 4. [Database Setup](#database-setup)
 5. [Environment Configuration](#environment-configuration)
 6. [Running the Application](#running-the-application)
-7. [Troubleshooting](#troubleshooting)
-8. [Project Structure](#project-structure)
-9. [Customization](#customization)
+7. [Vercel Deployment](#vercel-deployment)
+8. [Troubleshooting](#troubleshooting)
+9. [Project Structure](#project-structure)
+10. [Customization](#customization)
 
 ---
 
@@ -509,6 +510,403 @@ custom_value = os.environ.get("CUSTOM_SETTING")
 3. **Monitor API usage** to avoid OpenAI rate limits
 4. **Use database indexing** for better query performance
 5. **Enable caching** for repeated requests
+
+---
+
+## Vercel Deployment
+
+### Overview
+
+Vercel is a popular platform for deploying web applications. This section covers deploying both the FastAPI backend and Streamlit frontend to Vercel.
+
+### Prerequisites for Vercel Deployment
+
+1. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
+2. **GitHub Account**: Your code should be in a GitHub repository
+3. **Vercel CLI** (optional): `npm install -g vercel`
+4. **PostgreSQL Database**: Use a cloud database service (see Database Options below)
+
+### Database Options for Production
+
+Since Vercel doesn't provide database hosting, you'll need a cloud database:
+
+#### Option 1: Supabase (Recommended)
+1. Go to [supabase.com](https://supabase.com)
+2. Create a new project
+3. Get your database URL from Settings → Database
+4. Format: `postgresql://[user]:[password]@[host]:[port]/[database]`
+
+#### Option 2: Railway
+1. Go to [railway.app](https://railway.app)
+2. Create a new PostgreSQL service
+3. Get connection details from the Variables tab
+
+#### Option 3: Neon
+1. Go to [neon.tech](https://neon.tech)
+2. Create a new database
+3. Get connection string from the dashboard
+
+### Backend Deployment (FastAPI)
+
+#### Step 1: Prepare Backend for Vercel
+
+Create `vercel.json` in your project root:
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend.py"
+    }
+  ],
+  "env": {
+    "PYTHONPATH": "."
+  }
+}
+```
+
+#### Step 2: Create API Directory Structure
+
+Vercel requires specific structure for Python APIs:
+
+```
+project-root/
+├── api/
+│   └── index.py      # Your FastAPI app
+├── backend.py        # Keep original
+├── vercel.json       # Vercel configuration
+└── requirements.txt  # Dependencies
+```
+
+Create `api/index.py`:
+```python
+from backend import app
+
+# Vercel expects the app to be named 'app' and be the default export
+```
+
+#### Step 3: Update requirements.txt
+
+Create `requirements.txt` with exact versions:
+```txt
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+openai==1.3.0
+psycopg2-binary==2.9.9
+pydantic==2.5.0
+requests==2.31.0
+python-multipart==0.0.6
+python-dotenv==1.0.0
+```
+
+#### Step 4: Deploy Backend to Vercel
+
+**Method 1: Using Vercel Dashboard**
+1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+2. Click "New Project"
+3. Import your GitHub repository
+4. Select the repository containing your backend
+5. Configure environment variables:
+   - `DATABASE_URL`: Your cloud database URL
+   - `OPENAI_API_KEY`: Your OpenAI API key
+6. Deploy
+
+**Method 2: Using Vercel CLI**
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy from project directory
+vercel
+
+# Follow prompts and add environment variables
+vercel env add DATABASE_URL
+vercel env add OPENAI_API_KEY
+
+# Deploy
+vercel --prod
+```
+
+#### Step 5: Configure Environment Variables
+
+In Vercel dashboard:
+1. Go to your project
+2. Click "Settings" → "Environment Variables"
+3. Add:
+   - `DATABASE_URL`: `postgresql://user:pass@host:port/db`
+   - `OPENAI_API_KEY`: `sk-your-api-key`
+   - `PGHOST`: Database host
+   - `PGPORT`: Database port (usually 5432)
+   - `PGUSER`: Database username
+   - `PGPASSWORD`: Database password
+   - `PGDATABASE`: Database name
+
+### Frontend Deployment (Streamlit)
+
+#### Important Note
+Streamlit applications require a different approach on Vercel since they're not typical web apps.
+
+#### Option 1: Convert to FastAPI + HTML/JS Frontend
+
+**Create a new FastAPI frontend:**
+
+`frontend_api.py`:
+```python
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+import requests
+import os
+
+app = FastAPI()
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>SkyNet AI</title>
+        <link rel="stylesheet" href="/static/cyberpunk.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-content-centered">
+                <div class="logo">
+                    <img src="/static/terminator_skull.png" alt="Skynet Logo">
+                </div>
+                <div class="title-section-centered">
+                    <h1 class="professional-title">SKYNET</h1>
+                    <p class="subtitle">Neural Network Defense System</p>
+                    <div class="company-badge-centered">System Online</div>
+                </div>
+            </div>
+        </div>
+        <!-- Add your chat interface here -->
+    </body>
+    </html>
+    """
+
+@app.get("/chat")
+async def chat_interface():
+    # Your chat logic here
+    pass
+```
+
+#### Option 2: Deploy Streamlit on Streamlit Cloud
+
+**Streamlit Cloud (Recommended for Streamlit apps):**
+
+1. Go to [share.streamlit.io](https://share.streamlit.io)
+2. Connect your GitHub account
+3. Select your repository
+4. Set main file path: `frontend.py`
+5. Add secrets in the Streamlit Cloud dashboard:
+   ```toml
+   # .streamlit/secrets.toml (for Streamlit Cloud)
+   [database]
+   DATABASE_URL = "postgresql://user:pass@host:port/db"
+   
+   [openai]
+   OPENAI_API_KEY = "sk-your-api-key"
+   ```
+
+#### Option 3: Use Vercel with Custom Build
+
+Create `package.json`:
+```json
+{
+  "name": "skynet-frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "python -m streamlit run frontend.py --server.port $PORT",
+    "start": "python -m streamlit run frontend.py --server.port 8501"
+  },
+  "dependencies": {}
+}
+```
+
+Update `vercel.json`:
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "."
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/frontend.py"
+    }
+  ]
+}
+```
+
+### Complete Deployment Workflow
+
+#### Step 1: Prepare Your Repository
+
+```bash
+# Create deployment branch
+git checkout -b deployment
+
+# Create necessary files
+touch vercel.json
+touch requirements.txt
+mkdir -p api
+```
+
+#### Step 2: Update Code for Production
+
+**Update backend.py for CORS:**
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Configure for your frontend domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+**Update frontend.py for production API:**
+```python
+# Replace localhost with your Vercel backend URL
+BACKEND_URL = os.environ.get("BACKEND_URL", "https://your-backend.vercel.app")
+```
+
+#### Step 3: Deploy Both Services
+
+**Backend:**
+```bash
+# Create separate repo for backend
+git subtree push --prefix=backend origin backend-deploy
+
+# Deploy to Vercel
+vercel --prod
+```
+
+**Frontend:**
+```bash
+# Deploy to Streamlit Cloud or create HTML/JS version for Vercel
+```
+
+### Environment Variables for Production
+
+Create `.env.production`:
+```env
+# Database (use cloud database)
+DATABASE_URL=postgresql://user:pass@host:port/db
+
+# OpenAI
+OPENAI_API_KEY=sk-your-production-key
+
+# Backend URL (for frontend)
+BACKEND_URL=https://your-backend.vercel.app
+
+# Security
+CORS_ORIGINS=https://your-frontend.vercel.app,https://your-streamlit.app
+```
+
+### Custom Domain Setup
+
+#### For Vercel:
+1. Go to project settings
+2. Click "Domains"
+3. Add your custom domain
+4. Update DNS records as instructed
+
+#### For Streamlit Cloud:
+1. Go to app settings
+2. Add custom domain
+3. Configure DNS with CNAME record
+
+### Monitoring and Logs
+
+#### Vercel:
+- View logs in Vercel dashboard
+- Monitor usage and performance
+- Set up alerts for errors
+
+#### Streamlit Cloud:
+- View logs in Streamlit Cloud dashboard
+- Monitor app health
+- Check resource usage
+
+### Production Considerations
+
+1. **Security:**
+   - Use environment variables for all secrets
+   - Enable HTTPS (automatic on Vercel)
+   - Configure proper CORS settings
+
+2. **Performance:**
+   - Use connection pooling for database
+   - Implement caching for API responses
+   - Optimize images and static assets
+
+3. **Monitoring:**
+   - Set up error tracking (Sentry)
+   - Monitor API usage and costs
+   - Track user analytics
+
+4. **Scaling:**
+   - Configure auto-scaling settings
+   - Monitor resource usage
+   - Set up load balancing if needed
+
+### Troubleshooting Vercel Deployment
+
+#### Common Issues:
+
+**Build Fails:**
+```bash
+# Check build logs in Vercel dashboard
+# Ensure requirements.txt has correct versions
+# Verify Python version compatibility
+```
+
+**API Errors:**
+```bash
+# Check environment variables are set
+# Verify database connection
+# Check API endpoint URLs
+```
+
+**CORS Issues:**
+```python
+# Add proper CORS configuration
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://your-frontend-domain.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
 
 ---
 
