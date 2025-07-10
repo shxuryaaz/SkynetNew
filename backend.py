@@ -5,6 +5,7 @@ from typing import Dict, List, Optional
 import os
 import json
 from openai import OpenAI
+from database import DatabaseManager
 
 # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
 # do not change this unless explicitly requested by the user
@@ -22,8 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory session storage
-sessions: Dict[str, List[Dict[str, str]]] = {}
+# Initialize database
+db = DatabaseManager()
 
 # Domain-specific AI personalities
 PERSONALITIES = {
@@ -57,13 +58,20 @@ PERSONALITIES = {
 class ChatRequest(BaseModel):
     message: str
     domain: str
-    session_id: str
+    chat_id: int
 
 class ChatResponse(BaseModel):
     response: str
     personality: str
-    session_id: str
+    chat_id: int
     color: str
+
+class CreateChatRequest(BaseModel):
+    title: str
+
+class CreateChatResponse(BaseModel):
+    id: int
+    title: str
 
 @app.get("/")
 async def root():
@@ -80,6 +88,48 @@ async def get_personalities():
         for domain, info in PERSONALITIES.items()
     }
 
+@app.post("/chats", response_model=CreateChatResponse)
+async def create_chat(request: CreateChatRequest):
+    """Create a new chat session"""
+    try:
+        chat_id = db.create_chat(request.title)
+        return CreateChatResponse(id=chat_id, title=request.title)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating chat: {str(e)}")
+
+@app.get("/chats")
+async def get_chats():
+    """Get all chat sessions"""
+    try:
+        return {"chats": db.get_all_chats()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching chats: {str(e)}")
+
+@app.get("/chats/{chat_id}")
+async def get_chat(chat_id: int):
+    """Get chat information and messages"""
+    try:
+        chat_info = db.get_chat_info(chat_id)
+        if not chat_info:
+            raise HTTPException(status_code=404, detail="Chat not found")
+        
+        messages = db.get_chat_messages(chat_id)
+        return {
+            "chat": chat_info,
+            "messages": messages
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching chat: {str(e)}")
+
+@app.delete("/chats/{chat_id}")
+async def delete_chat(chat_id: int):
+    """Delete a chat session"""
+    try:
+        db.delete_chat(chat_id)
+        return {"message": "Chat deleted"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting chat: {str(e)}")
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """Main chat endpoint"""
@@ -91,18 +141,19 @@ async def chat(request: ChatRequest):
         # Get personality info
         personality = PERSONALITIES[request.domain]
         
-        # Initialize session if not exists
-        if request.session_id not in sessions:
-            sessions[request.session_id] = []
+        # Verify chat exists
+        chat_info = db.get_chat_info(request.chat_id)
+        if not chat_info:
+            raise HTTPException(status_code=404, detail="Chat not found")
         
-        # Add user message to session
-        sessions[request.session_id].append({
-            "role": "user",
-            "content": request.message
-        })
+        # Add user message to database
+        db.add_message(request.chat_id, "user", request.message)
+        
+        # Get recent conversation history for context
+        messages = db.get_chat_messages(request.chat_id)
         
         # Prepare messages for OpenAI
-        messages = [
+        openai_messages = [
             {
                 "role": "system",
                 "content": personality["system_prompt"]
@@ -110,48 +161,35 @@ async def chat(request: ChatRequest):
         ]
         
         # Add recent conversation history (last 10 messages to avoid token limits)
-        recent_messages = sessions[request.session_id][-10:]
-        messages.extend(recent_messages)
+        recent_messages = messages[-10:]
+        for msg in recent_messages:
+            openai_messages.append({
+                "role": msg["role"],
+                "content": msg["content"]
+            })
         
         # Get response from OpenAI
         response = openai_client.chat.completions.create(
             model="gpt-4o",
-            messages=messages,
+            messages=openai_messages,
             max_tokens=500,
             temperature=0.8
         )
         
         ai_response = response.choices[0].message.content
         
-        # Add AI response to session
-        sessions[request.session_id].append({
-            "role": "assistant",
-            "content": ai_response
-        })
+        # Add AI response to database
+        db.add_message(request.chat_id, "assistant", ai_response, personality["name"], personality["color"])
         
         return ChatResponse(
             response=ai_response,
             personality=personality["name"],
-            session_id=request.session_id,
+            chat_id=request.chat_id,
             color=personality["color"]
         )
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")
-
-@app.get("/session/{session_id}")
-async def get_session(session_id: str):
-    """Get session history"""
-    if session_id not in sessions:
-        return {"messages": []}
-    return {"messages": sessions[session_id]}
-
-@app.delete("/session/{session_id}")
-async def clear_session(session_id: str):
-    """Clear session history"""
-    if session_id in sessions:
-        sessions[session_id] = []
-    return {"message": "Session cleared"}
 
 if __name__ == "__main__":
     import uvicorn

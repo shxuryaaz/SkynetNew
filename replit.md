@@ -92,8 +92,15 @@ The application follows a client-server architecture with clear separation of co
 - **Flexibility**: Multiple AI personalities provide varied user experiences
 - **Maintainability**: Separate runner scripts allow independent development and deployment
 
+### Recent Enhancements (July 10, 2025)
+- **Persistent Chat Sessions**: Added PostgreSQL database integration for permanent conversation storage
+- **Multi-Chat Management**: Users can create, switch between, and delete multiple chat sessions
+- **Enhanced Sidebar**: Added chat history sidebar with session management controls
+- **Database Schema**: Implemented `chats` and `messages` tables with proper relationships
+- **Session Persistence**: Conversations are now saved permanently across application restarts
+
 ### Current Limitations
-- In-memory session storage (data lost on restart)
 - No user authentication or persistent user accounts
-- No database integration for conversation history
 - Limited to OpenAI GPT models only
+- No file upload capabilities
+- No advanced visual effects or animations

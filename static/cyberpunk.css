@@ -99,6 +99,15 @@
     box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
 }
 
+/* Welcome Message */
+.welcome-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--dark-bg), var(--card-bg));
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
 /* Message Styles */
 .user-message {
     background: linear-gradient(135deg, var(--neon-blue) 0%, rgba(0, 212, 255, 0.1) 100%);
