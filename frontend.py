@@ -3,6 +3,7 @@ import requests
 import json
 import uuid
 import time
+import base64
 from typing import Dict, List
 
 # Configure Streamlit page
@@ -17,6 +18,16 @@ st.set_page_config(
 def load_css():
     with open("static/cyberpunk.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Convert image to base64
+def get_base64_image(image_path):
+    """Convert image to base64 string"""
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except Exception as e:
+        st.error(f"Error loading image: {e}")
+        return ""
 
 # Initialize session state
 def init_session_state():
@@ -129,11 +140,23 @@ def main():
         st.session_state.personalities = get_personalities()
     
     # Header
-    st.markdown("""
+    skull_image = get_base64_image("static/terminator_skull.png")
+    st.markdown(f"""
     <div class="header">
-        <h1 class="professional-title">🤖 SKYNET</h1>
-        <p class="subtitle">Neural Network Defense System</p>
-        <div class="company-badge">System Online</div>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="data:image/png;base64,{skull_image}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; filter: brightness(0.9) contrast(1.1);">
+                </div>
+                <div class="title-section">
+                    <h1 class="professional-title">SKYNET</h1>
+                    <p class="subtitle">Neural Network Defense System</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="company-badge">System Online</div>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -155,6 +178,46 @@ def main():
                 st.session_state.messages = []
                 st.session_state.chats = get_chats()  # Refresh chats
                 st.rerun()
+        
+        # Export Project Button
+        if st.button("📦 Export Project", key="export_project", use_container_width=True):
+            try:
+                import subprocess
+                import datetime
+                
+                # Run the export script
+                result = subprocess.run(["python", "export_project.py"], 
+                                      capture_output=True, text=True)
+                
+                if result.returncode == 0:
+                    # Get the zip filename from the output
+                    output_lines = result.stdout.strip().split('\n')
+                    zip_filename = None
+                    for line in output_lines:
+                        if line.startswith("📦 Export file:"):
+                            zip_filename = line.split(": ")[1]
+                            break
+                    
+                    if zip_filename:
+                        # Read the zip file
+                        with open(zip_filename, "rb") as f:
+                            zip_data = f.read()
+                        
+                        # Create download button
+                        st.download_button(
+                            label="⬇️ Download Project",
+                            data=zip_data,
+                            file_name=zip_filename,
+                            mime="application/zip",
+                            key="download_zip"
+                        )
+                        st.success(f"✅ Project exported! Click above to download.")
+                    else:
+                        st.error("Could not find export file")
+                else:
+                    st.error(f"Export failed: {result.stderr}")
+            except Exception as e:
+                st.error(f"Export error: {str(e)}")
         
         # Load chats
         st.session_state.chats = get_chats()
@@ -317,7 +380,7 @@ def main():
             </div>
             <div style="text-align: right;">
                 <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">System Version 3.0</p>
-                <p style="margin: 0; font-size: 0.8rem; color: var(--accent-orange); font-weight: 600;">Made by Shaurya</p>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--accent-orange); font-weight: 600;">Neural Network Defense System Initiated By Shaurya Singh</p>
             </div>
         </div>
     </div>
