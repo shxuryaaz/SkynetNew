@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""
+SkyNetAI - Cyberpunk AI Chatbot
+Main entry point for the application
+
+This script helps you start both the backend and frontend servers.
+"""
+
+import subprocess
+import sys
+import os
+import threading
+import time
+
+def run_backend():
+    """Run the backend server"""
+    print("🚀 Starting Backend Server...")
+    try:
+        subprocess.run([sys.executable, "run_backend.py"], check=True)
+    except KeyboardInterrupt:
+        print("\n🛑 Backend server stopped")
+    except Exception as e:
+        print(f"❌ Backend error: {e}")
+
+def run_frontend():
+    """Run the frontend server"""
+    print("🎨 Starting Frontend Server...")
+    time.sleep(3)  # Wait for backend to start
+    try:
+        subprocess.run([sys.executable, "run_frontend.py"], check=True)
+    except KeyboardInterrupt:
+        print("\n🛑 Frontend server stopped")
+    except Exception as e:
+        print(f"❌ Frontend error: {e}")
+
+def main():
+    """Main entry point"""
+    print("=" * 60)
+    print("🤖 SkyNetAI - Cyberpunk AI Chatbot")
+    print("=" * 60)
+    print("Welcome to the Matrix of AI Consciousness!")
+    print()
+    print("This will start both the backend and frontend servers.")
+    print("Backend (FastAPI): http://localhost:8000")
+    print("Frontend (Streamlit): http://localhost:5000")
+    print()
+    print("⚠️  Make sure you have set your OPENAI_API_KEY environment variable!")
+    print("   export OPENAI_API_KEY=your_api_key_here")
+    print()
+    
+    # Check if OpenAI API key is set
+    if not os.getenv("OPENAI_API_KEY"):
+        print("❌ OPENAI_API_KEY environment variable not found!")
+        print("   Please set it and try again.")
+        response = input("Do you want to continue anyway? (y/N): ")
+        if response.lower() != 'y':
+            print("Exiting...")
+            sys.exit(1)
+    
+    print("🚀 Starting SkyNetAI servers...")
+    print("Press Ctrl+C to stop both servers")
+    print()
+    
+    try:
+        # Start backend in a separate thread
+        backend_thread = threading.Thread(target=run_backend, daemon=True)
+        backend_thread.start()
+        
+        # Start frontend in main thread
+        run_frontend()
+        
+    except KeyboardInterrupt:
+        print("\n🛑 Shutting down SkyNetAI...")
+        print("Goodbye from the Matrix!")
+        sys.exit(0)
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
